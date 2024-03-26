@@ -8,7 +8,7 @@ const { version } = require('../packages/connectors/package.json');
 const DELETE_TAGS = /next|preview|rc|main/;
 const CURRENT_VERSION = version;
 const DELETE_PACKAGES = process.env.DELETE_PACKAGES === 'true';
-const dryRun = DELETE_PACKAGES ? '--force' : '--dry-run';
+const dryRun = DELETE_PACKAGES ? '' : '--dry-run';
 
 async function getPublicPackages() {
   const base = join(__dirname, '../packages');
@@ -66,9 +66,11 @@ async function main() {
     for (const versionDelete of versionsToDelete) {
       console.log(`\n🗑️  Deleting ${packageName}@${versionDelete}...`);
       console.log(dryRun);
-      const { stderr } = await exec(
+      const { stdout, stderr } = await exec(
         `npm unpublish ${packageName}@${versionDelete} ${dryRun}`,
       );
+      console.log(stdout);
+
       if (stderr) {
         console.log(`❌ Error ${packageName}@${versionDelete} not deleted!\n`);
         console.log(stderr);
