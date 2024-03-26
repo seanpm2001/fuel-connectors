@@ -8,7 +8,7 @@ const { version } = require('../packages/connectors/package.json');
 const DELETE_TAGS = /next|preview|rc|main/;
 const CURRENT_VERSION = version;
 const DELETE_PACKAGES = process.env.DELETE_PACKAGES === 'true';
-const dryRun = DELETE_PACKAGES ? '' : '--dry-run';
+const dryRun = DELETE_PACKAGES ? '--force' : '--dry-run';
 
 async function getPublicPackages() {
   const packages = await readdir(join(__dirname, '../packages'), {
